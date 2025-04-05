@@ -2,91 +2,85 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const LoginPage = () => {
+const LoginPage = ({ setUser }) => {
   let navigate = useNavigate();
-  // const [username, setInputUsername] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [error, setError] = useState(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
  
 
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-  });
+  // const [user, setUser] = useState({
+  //   username: "",
+  //   password: "",
+  // });
 
-  const {
-    username, 
-    password,
-  } = user;
+  // const {
+  //   username, 
+  //   password,
+  // } = user;
   
 
-  // const handleLogin = () => {
-  //   fetch("/api/players/login", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ username, password }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       if (data.success) {
-  //         setUsername(username);
-  //         navigate("/api/games");
-  //       } else {
-  //         setError("Invalid username or password.");
-  //       }
-  //     });
-  // };
 
-  const handleInputChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.name] : e.target.value,
-    });
-  };
+  // const handleInputChange = async (e) => {
+  //   setUser({
+  //     ...user,
+  //     [e.target.name] : e.target.value,
+  //   });
+  // };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(user);
-    await axios.post("http://localhost:8080/api/players/login", user, {
-      headers: { "Content-Type": "application/json" },
-    });
-    navigate("/api/games");
+    // console.log(user);
+    try {
+      const response = await axios.post("http://localhost:8080/api/players/login", {username, password}, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.data.success) {
+        setUser(response.data.player);
+        navigate('/');
+      } else {
+        setError('Invalid username or password');
+      }
+    } catch (err) {
+      setError('Login failed. Try again');
+    }
   };
 
   return (
     <div className="p-4 max-w-md mx-auto text-center">
       <h2 className="text-xl font-bold">Login</h2>
-      <form onSubmit={(e) => handleLogin(e)}> 
-        <div>
-        <label>User Name</label>
+      <form onSubmit={handleLogin}> 
         <input 
         type = "text"
-        name = "username"
+        placeholder='UserName'
         value = {username}
-        onChange = {(e) => handleInputChange(e)}
+        onChange = {(e) => setUsername(e.target.value)}
         /> 
-        </div>
-        
-        <div>
-        <label>Password</label>
+
         <input 
         type = "text"
-        name = "password"
+        placeholder='Password'
         value = {password}
-        onChange={(e) => handleInputChange(e)}
+        onChange={(e) => setPassword(e.target.value)}
         />
-        </div>
+  
 
         <div>
-      {/* <button type="submit" className="p-2 bg-blue-500 text-white rounded mt-2 w-full">
+      <button type="submit" className="p-2 bg-blue-500 text-white rounded mt-2 w-full">
         Login
-        </button> */}
+        </button>
         </div>
 
-        <div>
+        {/* <div>
       <Link to={"/games"}>Cancel</Link>
-      </div>
+      </div> */}
       </form>
+      {error && (
+        <div>
+          {error}. <Link to="/signup"> Create an Account</Link>
+        </div>
+      )}
     </div>
   );
 };

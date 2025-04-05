@@ -4,6 +4,7 @@ import java.util.*;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,4 +23,10 @@ public class GameController {
     public List<Map<String, Object>> getAllGames() {
         return CasinoDatabase.games;
     }
+
+    @GetMapping("/games/{id}")
+    public Map<String, Object> getGameById(@PathVariable("id") int id) {
+        return CasinoDatabase.games.get(id);
+    }
+
 }

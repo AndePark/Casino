@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-// import Search from './Search';
+import '../App.css'; 
+// import games from '../images/games.jpg';
+
 
 const GameLibrary = () => {
   const [games, setGames] = useState([]);
@@ -23,13 +25,16 @@ const GameLibrary = () => {
       if (response.status === 200) {
         setGames(response.data);
       }
-      // console.log(response.data[0].name);
       console.log(response.data);
       console.log(response);
       console.log(games);
-      // console.log(Object.values(games));
-    
   };
+
+  const filteredGames = games.filter((game) => 
+    game.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const visibleGames = filteredGames.slice(0, visibleCount);
 
   // return (
   //   <section>
@@ -68,15 +73,26 @@ const GameLibrary = () => {
  return (
   <div className="p-4">
       <h2 className="text-xl font-bold">Game Library</h2>
-      <input type="text" placeholder="Search games" className="p-2 border rounded w-full mb-2" value={search} onChange={(e) => setSearch(e.target.value)} />
-      <div className="grid grid-cols-4 gap-4">
-        {games.filter(game => game.name.toLowerCase().includes(search.toLowerCase())).slice(0, visibleCount).map(game => (
+      <input type="text" placeholder="Search games" className="p-2 border rounded w-full mb-2" value={search} onChange={(e) => {
+        setSearch(e.target.value);
+        setVisibleCount(8);
+        }} 
+       />
+      <div className="container" >
+        {visibleGames.map((game) => (
           <Link key={game.id} to={`/game/${game.id}`} className="p-4 border rounded bg-gray-100 text-center">
-            <img src={game.image} alt={game.name} className="w-full h-24 object-cover" />
+            <div className='image-wrapper'>
+              <img src={require(`../images/games.jpg`)} alt={game.name} />
+              <h1 className='image-text'>{game.name}</h1>
+            </div>
           </Link>
         ))}
       </div>
-      {visibleCount < games.length && <button onClick={() => setVisibleCount(visibleCount + 8)} className="mt-4 bg-blue-500 text-white p-2 rounded">See More</button>}
+
+      {visibleCount < filteredGames.length && (
+        <div>
+          <button onClick={() => setVisibleCount((prev) => prev + 8)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">See More</button>
+        </div>)}
     </div>
 );
 };

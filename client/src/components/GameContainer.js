@@ -1,30 +1,89 @@
-// import React, { useState } from 'react';
-// import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
-// const GameContainer = ({ username }) => {
-//   const { gameId } = useParams();
-//   const [betAmount, setBetAmount] = useState("");
-//   const [message, setMessage] = useState("");
+const GameContainer = ({ user }) => {
+  const { id } = useParams();
+  const [game, setGame] = useState(null);
+  const [balance, setBalance] = useState(100);
+  const [betAmount, setBetAmount] = useState(0);
+  const [gameResult, setGameResult] = useState(null);
+  const [message, setMessage] = useState("");
 
-//   const placeBet = () => {
-//     fetch("/api/bets/place", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ username, gameId, betAmount }),
-//     })
-//       .then((res) => res.json())
-//       .then((data) => setMessage(data.message));
-//   };
+  const betOptions = [1, 3, 5, 10];
 
-//   return (
-//     <div className="p-4 text-center">
-//       <h2 className="text-xl font-bold">Place Your Bet</h2>
-//       <input type="number" placeholder="Bet Amount" className="p-2 border rounded w-full mt-2" value={betAmount} onChange={(e) => setBetAmount(e.target.value)} />
-//       <button className="p-2 bg-red-500 text-white rounded mt-2 w-full" onClick={placeBet}>Place Bet</button>
-//       {message && <p className="mt-4 text-lg font-bold">{message}</p>}
-//     </div>
-//   );
-// };
+  useEffect(() => {
+    axios.get(`http://localhost:8080/api/games/${id}`)
+    .then(response => {
+      setGame(response.data);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }, [id, user])
 
 
-// export default GameContainer;
+  const handleBet = async (amount) => {
+    if (amount > user.balance) {
+      alert('Insufficient balance for this bet');
+      return;
+    }
+
+  try {
+    const response = await axios.post("http://localhost:8080/api/bets/place", {
+      username: user.username,
+      betAmount: amount,
+    });
+
+    if (response.data.success) {
+      setBalance(response.data.newBalance);
+      setGameResult(response.data.message);
+    } else {
+      setMessage(response.data.message);
+    }
+  } catch (err) {
+    setMessage('Error occurred while placing the bet');
+  }
+};
+
+return (
+  <div>
+    <div>
+      <img src={require(`../images/games.jpg`)} alt='game' />
+    </div>
+    <div className="balance mt-4">
+        <p><strong>Balance: ${balance}</strong></p>
+      </div>
+
+      <div className="bet-options mt-4">
+        <p>Place your bet:</p>
+        <div className="bet-buttons">
+          {betOptions.map((bet) => (
+            <button
+              key={bet}
+              onClick={() => handleBet(bet)}
+              className="p-2 m-2 bg-blue-500 text-white rounded"
+            >
+              ${bet}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {gameResult && (
+        <div className="game-result mt-4">
+          <p>{gameResult}</p>
+        </div>
+      )}
+
+      {message && (
+        <div className="message mt-4 text-red-500">
+          <p>{message}</p>
+        </div>
+      )}
+  </div>
+)
+};
+
+
+export default GameContainer;

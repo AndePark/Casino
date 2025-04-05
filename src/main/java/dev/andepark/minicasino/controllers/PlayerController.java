@@ -27,10 +27,10 @@ public class PlayerController {
     public Map<String, Object> signup(@RequestBody Map<String, String> body) {
         String username = body.get("username");
         String password = body.get("password");
-        String confirmPassword = body.get("confirmPassword");
+        String repeatPassword = body.get("repeatPassword");
         LocalDate birthdate = LocalDate.parse(body.get("birthdate"));
 
-        if (!password.equals(confirmPassword)) return Map.of("success", false, "message", "Passwords do not match");
+        if (!password.equals(repeatPassword)) return Map.of("success", false, "message", "Passwords do not match");
         if (!password.matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{5,}$"))
             return Map.of("success", false, "message", "Password too weak");
         if (birthdate.isAfter(LocalDate.now().minusYears(18)))
@@ -46,7 +46,7 @@ public class PlayerController {
         newPlayer.put("balance", 100);
         CasinoDatabase.players.add(newPlayer);
 
-        return Map.of("success", true, "message", "Signup successful");
+        return Map.of("success", true, "message", "Signup successful", "player", newPlayer);
     }
 
     @PostMapping("/login")
@@ -56,7 +56,7 @@ public class PlayerController {
 
         for (Map<String, Object> player : CasinoDatabase.players) {
             if (player.get("username").equals(username) && player.get("password").equals(password)) {
-                return Map.of("success", true, "message", "Login successful");
+                return Map.of("success", true, "message", "Login successful", "player", player);
             }
         }
         return Map.of("success", false, "message", "Invalid credentials");
