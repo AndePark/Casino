@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const LoginPage = ({ setUser }) => {
+const LoginPage = ({setUser}) => {
   let navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +38,9 @@ const LoginPage = ({ setUser }) => {
 
       if (response.data.success) {
         setUser(response.data.player);
-        navigate('/');
+        navigate('/games');
+
+      
       } else {
         setError('Invalid username or password');
       }
@@ -46,6 +48,7 @@ const LoginPage = ({ setUser }) => {
       setError('Login failed. Try again');
     }
   };
+
 
   return (
     <div className="p-4 max-w-md mx-auto text-center">
@@ -71,6 +74,7 @@ const LoginPage = ({ setUser }) => {
         Login
         </button>
         </div>
+        
 
         {/* <div>
       <Link to={"/games"}>Cancel</Link>

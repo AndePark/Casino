@@ -14,13 +14,13 @@ import { FaUser } from 'react-icons/fa';
 // );
 
 
-const LandingPage = ({ user, setUser }) => {
+const LandingPage = ({ user }) => {
   let navigate = useNavigate();
 
-  const handleLogout = () => {
-    setUser(null);
-    navigate('/login');
-  };
+  // const handleLogout = () => {
+  //   setUser(null);
+  //   navigate('/login');
+  // };
 
   // useEffect(() => {
   //   if (!user) {
@@ -34,12 +34,12 @@ const LandingPage = ({ user, setUser }) => {
      {user ? (
       <>
       <h2>Welcome back, {user.username}</h2>
-        <button
+        {/* <button
             onClick={handleLogout}
             className="mt-4 bg-red-500 text-white px-4 py-2 rounded"
           >
             Logout
-        </button>
+        </button> */}
         <Link to="/games">
           <FaUser className="inline mr-2" />
             Go To Games Library</Link>

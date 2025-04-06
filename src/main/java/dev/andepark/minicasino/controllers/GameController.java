@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class GameController {
-    // private final List<Game> games = Arrays.asList(
-    //     new Game(1, "Roulette", 1, 2.0, 1.0, 100.0),
-    //     new Game(2, "Blackjack", 2, 2.5, 5.0, 200.0)
-    // );
 
     @GetMapping("/games")
     public List<Map<String, Object>> getAllGames() {

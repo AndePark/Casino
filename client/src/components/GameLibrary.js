@@ -80,7 +80,7 @@ const GameLibrary = () => {
        />
       <div className="container" >
         {visibleGames.map((game) => (
-          <Link key={game.id} to={`/game/${game.id}`} className="p-4 border rounded bg-gray-100 text-center">
+          <Link key={game.id} to={`/games/${game.id}`} className="p-4 border rounded bg-gray-100 text-center">
             <div className='image-wrapper'>
               <img src={require(`../images/games.jpg`)} alt={game.name} />
               <h1 className='image-text'>{game.name}</h1>

@@ -51,7 +51,8 @@ const SignupPage = () => {
         });
   
         if (res.data.success) {
-          navigate("/games");
+          // setUser(res.data.player);
+          navigate("/login");
         } else {
           setError(res.data.message || 'Signup failed.');
         }

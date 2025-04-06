@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import LoginPage from './components/LoginPage';
 import GameLibrary from './components/GameLibrary';
@@ -12,6 +12,8 @@ const App = () => {
   // const [username, setUsername] = useState(null);
   const [user, setUser] = useState(null);
 
+
+
   return (
     <main style={{
       backgroundImage: `url(${landingpagebg})`, backgroundSize: 'cover', width: '100vw', height: '100vh'
@@ -19,10 +21,15 @@ const App = () => {
       <Router>
         <Routes>
           <Route path='/' element={<LandingPage user={user} setUser={setUser} />}></Route>
+          {/* {user ? (
+            <Route path="/" element={<LandingPage user={user} setUser={setUser} />}></Route>
+          ) : (
+            <Route path="/login" element={<LoginPage setUser={setUser} />}></Route>
+          )} */}
           <Route path="/login" element={<LoginPage setUser={setUser} />}></Route>
           <Route path="/signup" element={<SignupPage />}></Route>
           <Route path="/games" element={<GameLibrary />}></Route>
-          <Route path="/game/:id" element={<GameContainer user={user} />}></Route>
+          <Route path="/games/:id" element={<GameContainer user={user} />}></Route>
         </Routes>
       </Router> 
     </main>
