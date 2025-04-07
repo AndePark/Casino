@@ -7,22 +7,20 @@ const LoginPage = ({setUser}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
- 
 
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // console.log(user);
     try {
       const response = await axios.post("http://localhost:8080/api/players/login", {username, password}, {
         headers: { "Content-Type": "application/json" },
       });
 
       if (response.data.success) {
-        setUser(response.data.player);
-        navigate('/games');
-
-      
+        const user = {username, password};
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+        navigate('/');
       } else {
         setError('Invalid username or password');
       }
@@ -33,35 +31,57 @@ const LoginPage = ({setUser}) => {
 
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}> 
-        <input 
-        type = "text"
-        placeholder='UserName'
-        value = {username}
-        onChange = {(e) => setUsername(e.target.value)}
-        /> 
+    <div style={{
+      height: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <h2 style={{
+          marginBottom: '20px',
+          color: 'black',
+          fontSize: '28px',
+        }}>LOGIN</h2>
 
-        <input 
-        type = "text"
-        placeholder='Password'
-        value = {password}
-        onChange={(e) => setPassword(e.target.value)}
-        />
-  
+        <form onSubmit={handleLogin} style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+          alignItems: 'center'
+        }}>
+          <input
+            type="text"
+            placeholder="User Name"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            style={{ padding: '10px', fontSize: '16px', width: '250px' }}
+          />
 
-        <div>
-      <button type="submit">
-        Login
-        </button>
-        </div>
-      </form>
-      {error && (
-        <div>
-          {error}. <Link to="/signup"> Create an Account</Link>
-        </div>
-      )}
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{ padding: '10px', fontSize: '16px', width: '250px' }}
+          />
+
+          <button type="submit" style={{ padding: '10px', fontSize: '16px' }}>
+            Login
+          </button>
+        </form>
+
+        {error && (
+          <div style={{ color: 'red', fontSize: '25px' }}>
+            {error}.
+            <div style={{ marginTop: '10px' }}>
+              <Link to="/signup" style={{ color: 'darkblue', fontSize: '20px' }}>
+                Create an Account
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

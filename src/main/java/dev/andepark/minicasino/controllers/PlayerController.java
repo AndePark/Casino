@@ -1,20 +1,10 @@
 package dev.andepark.minicasino.controllers;
 
 import java.time.LocalDate;
-// import java.time.Period;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-// import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @CrossOrigin("http://localhost:3000")
@@ -28,6 +18,7 @@ public class PlayerController {
     }
 
 
+    // signup new player 
     @PostMapping("/signup")
     public Map<String, Object> signup(@RequestBody Map<String, String> body) {
         String username = body.get("username");
@@ -43,7 +34,7 @@ public class PlayerController {
 
 
         for (Map<String, Object> player : db.getPlayers()) {
-            if (player.get("username").equals(username)) return Map.of("success", false, "message", "Username taken");
+            if (player.get("username").equals(username)) return Map.of("success", false, "message", "Username Taken");
         }
 
         Map<String, Object> newPlayer = new HashMap<>();
@@ -51,10 +42,10 @@ public class PlayerController {
         newPlayer.put("password", password);
         newPlayer.put("balance", 100.0);
         db.players.add(newPlayer);
-
         return Map.of("success", true, "message", "Signup successful", "player", newPlayer);
     }
 
+    // login player 
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> body) {
         String username = body.get("username");
@@ -68,6 +59,7 @@ public class PlayerController {
         return Map.of("success", false, "message", "Invalid credentials");
     }
 
+    // place a bet 
     @PostMapping("/place")
     public Map<String, Object> placeBet(@RequestBody Map<String, Object> body) {
         String username = (String) body.get("username");
@@ -82,16 +74,18 @@ public class PlayerController {
             return Map.of("success", false, "message", "Player not found");
         }
 
+        // alert is used if there is insufficient balance to place the bet, otherwise display 
+        // the message associated with the unsuccessful placement of bet (ie. min/max bet not selected)
         double balance = (Double) player.get("balance");
         if (balance < betAmount) {
-            return Map.of("success", false, "message", "Insufficient balance");
+            return Map.of("success", false, "message", "Insufficient balance", "type", false);
         }
 
         int minBet = (int) game.get("minBet");
         int maxBet = (int) game.get("maxBet");
 
         if (betAmount < minBet || betAmount > maxBet) {
-            return Map.of("success", false, "message", "Place Valid Min/Max Bet");
+            return Map.of("success", false, "message", "Place Valid Min/Max Bet", "type", true);
         }
         
         double chanceWin = (Double) game.get("chanceOfWinning");
@@ -100,12 +94,49 @@ public class PlayerController {
         
         if (isWin) {
             // If win, new balance incremented by betAmount * multiplier
-            player.put("balance", (Double) player.get("balance") + (betAmount * multiplier));
-            return Map.of("success", true, "message", String.format("You Won $%.2f!", (betAmount * multiplier)), "balance", player.get("balance"));
+            db.updatePlayerBalance(username, balance + (betAmount * multiplier));
+            return Map.of("success", true, "message", String.format("You Won %.2f€!", (betAmount * multiplier)), "balance", player.get("balance"));
         } else {
             // If lose, new balance decremented by betAmount 
-            player.put("balance", (Double) player.get("balance") - betAmount);
-            return Map.of("success", true, "message", String.format("You Lost $%.2f!", (betAmount)), "balance", player.get("balance"));
+            db.updatePlayerBalance(username, balance - betAmount);
+            return Map.of("success", true, "message", String.format("You Lost %.2f€!", (betAmount)), "balance", player.get("balance"));
         }
+    }
+
+    // deposit to player's balance
+    @PostMapping("/deposit")
+    public Map<String, Object> deposit(@RequestBody Map<String, String> body) {
+        String username = (String) body.get("username");
+        String depositStr = (String) body.get("deposit");
+
+        double deposit = 0.00; 
+        Map<String, Object> player = db.getPlayerByUsername(username);
+        System.out.println(player);
+
+        // check that deposit a double and not another type like a string 
+        try {
+            deposit = Double.parseDouble(depositStr);
+        } catch (NumberFormatException e) {
+            return Map.of("success", false, "message", "Invalid Deposit Amount","balance", player.get("balance"));
+        }
+
+
+        double balance = (Double) player.get("balance");
+
+        if (deposit > 0.00) {
+            // add deposit to player balance if deposit > 0 
+            db.updatePlayerBalance(username, balance + deposit);
+            return Map.of("success", true, "message", "Deposit Successful", "balance", player.get("balance"));
+        } else {
+            // otherwise return invalid deposit message 
+            return Map.of("success", false, "message", "Invalid Deposit Amount","balance", player.get("balance"));
+        }
+    }
+
+    // get players balance 
+    @GetMapping("/balance/{username}") 
+    public Map<String, Object> getPlayerBalance(@PathVariable("username") String username) {
+        Map<String, Object> player = db.getPlayerByUsername(username);
+        return Map.of("success", true, "message", "Balance Retrieved", "balance", player.get("balance"));
     }
 }
