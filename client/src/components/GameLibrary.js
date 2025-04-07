@@ -22,7 +22,7 @@ const GameLibrary = ({ user, setUser }) => {
     // Clear user data from localStorage
     localStorage.removeItem('user');
     setUser(null);
-    navigate('/login');
+    navigate('/');
   };
 
 
@@ -119,7 +119,20 @@ const GameLibrary = ({ user, setUser }) => {
                 cursor: 'pointer'
             }}>Log Out</button>
           </div>
-          </div>
+         
+          {visibleCount < filteredGames.length && (
+        <div>
+          <button onClick={() => setVisibleCount((prev) => prev + 8)} 
+            style={{
+              fontSize: '20px',
+              backgroundColor: '#333',
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              cursor: 'pointer'
+            }}>See More</button>
+        </div>)}
+        </div>
         
       <div className="container" >
         {visibleGames.map((game) => (
@@ -132,18 +145,7 @@ const GameLibrary = ({ user, setUser }) => {
         ))}
       </div>
 
-      {visibleCount < filteredGames.length && (
-        <div>
-          <button onClick={() => setVisibleCount((prev) => prev + 8)} 
-            style={{
-              fontSize: '20px',
-              backgroundColor: '#333',
-              color: 'white',
-              border: 'none',
-              borderRadius: '10px',
-              cursor: 'pointer'
-            }}>See More</button>
-        </div>)}
+    
     </div>
 );
 };

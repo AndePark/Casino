@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaUser } from 'react-icons/fa';
 
 const SignupPage = ({setUser}) => {
     const [username, setUsername] = useState("");
@@ -72,9 +73,11 @@ const SignupPage = ({setUser}) => {
         />
         <button
           type="submit"
-          style={{ padding: '10px 20px', fontSize: '16px', marginTop: '12px' }}
+          style={{ padding: '10px 20px', fontSize: '16px', marginTop: '12px', border: '1px solid black',
+            borderRadius: '5px'}}
         >
-          Sign Up
+          <FaUser />
+           Sign Up
         </button>
       </form>
 

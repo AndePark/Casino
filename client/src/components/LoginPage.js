@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FaUser } from 'react-icons/fa';
 
 const LoginPage = ({setUser}) => {
   let navigate = useNavigate();
@@ -65,8 +66,9 @@ const LoginPage = ({setUser}) => {
             onChange={(e) => setPassword(e.target.value)}
             style={{ padding: '10px', fontSize: '16px', width: '250px' }}
           />
-
-          <button type="submit" style={{ padding: '10px', fontSize: '16px' }}>
+           <button type="submit" style={{ padding: '10px', fontSize: '16px', border: '1px solid black',
+                borderRadius: '5px'}}>
+            <FaUser />
             Login
           </button>
         </form>

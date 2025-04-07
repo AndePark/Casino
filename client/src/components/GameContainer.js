@@ -49,7 +49,7 @@ const GameContainer = ({ user, setUser }) => {
     // Clear user data from localStorage
     localStorage.removeItem('user');
     setUser(null);
-    navigate('/login');
+    navigate('/');
   };
 
 

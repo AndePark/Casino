@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link , useNavigate} from 'react-router-dom';
-import { FaUser } from 'react-icons/fa';
+import { FaUser, FaList} from 'react-icons/fa';
 
 
 
@@ -51,12 +51,15 @@ const LandingPage = ({ user, setUser }) => {
                 borderRadius: '5px',
                 marginTop: '12px',
               }}>
-          <FaUser />
+          <FaList />
             Go To Games Library
             
             </Link>
           <div style={{ marginBottom: '10px', padding: '10px',}}> 
-            <button style={{ padding: '10px', fontSize: '16px' }} onClick={handleLogout}>Log Out</button>
+            <button style={{ padding: '10px', fontSize: '16px', border: '1px solid black',
+                borderRadius: '5px'}} onClick={handleLogout}>
+                   <FaUser />
+                   Log Out</button>
           </div>
       </>
      ) : (
