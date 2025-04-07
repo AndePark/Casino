@@ -25,9 +25,6 @@ const GameLibrary = () => {
       if (response.status === 200) {
         setGames(response.data);
       }
-      console.log(response.data);
-      console.log(response);
-      console.log(games);
   };
 
   const filteredGames = games.filter((game) => 
@@ -36,53 +33,19 @@ const GameLibrary = () => {
 
   const visibleGames = filteredGames.slice(0, visibleCount);
 
-  // return (
-  //   <section>
-  //     <Search 
-  //       search = {search}
-  //       setSearch={setSearch}
-  //       />
-  //     <table>
-  //       <thead>
-  //         <tr>
-  //           <th>Names of All Games</th>
-  //       </tr>
-  //       </thead>
-
-  //     <tbody>
-  //       {games.map((game, index) => (
-  //         <tr key={game.id}>
-  //           <th scope='row' key={index}> {index + 1} </th>
-  //         {/* <td>ID: {game.id}</td> */}
-  //         <td>Name: {game.name}</td>
-  //         <td>Chance of Winning: {game.chanceOfWinning}</td>
-  //         <td>Multiplier: {game.multiplier}</td>
-  //         <td>Max Bet: {game.maxBet}</td>
-  //         <td>Min Bet: {game.minBet}</td>
-  //         <td>
-  //         <Link to={"/games"}></Link>
-  //         </td>
-      
-  //           </tr>
-  //       ))}
-  //       </tbody>
-  //       </table>
-  //   </section>
-  // );
-
  return (
-  <div className="p-4">
-      <h2 className="text-xl font-bold">Game Library</h2>
-      <input type="text" placeholder="Search games" className="p-2 border rounded w-full mb-2" value={search} onChange={(e) => {
+  <div>
+      <h2>Game Library</h2>
+      <input type="text" placeholder="Search games" value={search} onChange={(e) => {
         setSearch(e.target.value);
         setVisibleCount(8);
         }} 
        />
       <div className="container" >
         {visibleGames.map((game) => (
-          <Link key={game.id} to={`/games/${game.id}`} className="p-4 border rounded bg-gray-100 text-center">
+          <Link key={game.id} to={`/games/${game.id}`}>
             <div className='image-wrapper'>
-              <img src={require(`../images/games.jpg`)} alt={game.name} />
+              <img src={require(`../images/game.jpg`)} alt={game.name} style={{  objectFit: 'cover', borderRadius: '8px' }}/>
               <h1 className='image-text'>{game.name}</h1>
             </div>
           </Link>
@@ -91,7 +54,7 @@ const GameLibrary = () => {
 
       {visibleCount < filteredGames.length && (
         <div>
-          <button onClick={() => setVisibleCount((prev) => prev + 8)} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">See More</button>
+          <button onClick={() => setVisibleCount((prev) => prev + 8)}>See More</button>
         </div>)}
     </div>
 );

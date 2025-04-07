@@ -9,24 +9,6 @@ const LoginPage = ({setUser}) => {
   const [error, setError] = useState("");
  
 
-  // const [user, setUser] = useState({
-  //   username: "",
-  //   password: "",
-  // });
-
-  // const {
-  //   username, 
-  //   password,
-  // } = user;
-  
-
-
-  // const handleInputChange = async (e) => {
-  //   setUser({
-  //     ...user,
-  //     [e.target.name] : e.target.value,
-  //   });
-  // };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -51,8 +33,8 @@ const LoginPage = ({setUser}) => {
 
 
   return (
-    <div className="p-4 max-w-md mx-auto text-center">
-      <h2 className="text-xl font-bold">Login</h2>
+    <div>
+      <h2>Login</h2>
       <form onSubmit={handleLogin}> 
         <input 
         type = "text"
@@ -70,15 +52,10 @@ const LoginPage = ({setUser}) => {
   
 
         <div>
-      <button type="submit" className="p-2 bg-blue-500 text-white rounded mt-2 w-full">
+      <button type="submit">
         Login
         </button>
         </div>
-        
-
-        {/* <div>
-      <Link to={"/games"}>Cancel</Link>
-      </div> */}
       </form>
       {error && (
         <div>

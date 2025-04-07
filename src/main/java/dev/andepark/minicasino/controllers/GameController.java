@@ -15,14 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class GameController {
 
+    public CasinoDatabase db; 
+
+    public GameController() {
+        db = new CasinoDatabase();
+    }
+
     @GetMapping("/games")
     public List<Map<String, Object>> getAllGames() {
-        return CasinoDatabase.games;
+        return db.getGames();
     }
 
     @GetMapping("/games/{id}")
     public Map<String, Object> getGameById(@PathVariable("id") int id) {
-        return CasinoDatabase.games.get(id);
+        return db.getGames().get(id);
     }
-
 }

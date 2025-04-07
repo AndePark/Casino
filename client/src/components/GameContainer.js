@@ -1,16 +1,15 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams , Link} from 'react-router-dom';
 import axios from 'axios';
 
 const GameContainer = ({ user }) => {
   const { id } = useParams();
   const [game, setGame] = useState(null);
-  const [balance, setBalance] = useState(0);
-  const [gameResult, setGameResult] = useState(null);
+  const [balance, setBalance] = useState(user.balance);
+  const [gameResult, setGameResult] = useState("");
   const [message, setMessage] = useState("");
   const username = user.username;
-
   
 
   const betOptions = [1, 3, 5, 10];
@@ -18,28 +17,28 @@ const GameContainer = ({ user }) => {
   useEffect(() => {
     axios.get(`http://localhost:8080/api/games/${id}`)
     .then(response => {
-      setGame(response.data);
+      setGame(response.data.name);
     })
     .catch(err => {
       console.error(err);
     });
   }, [id]);
 
-  console.log('***');
-  console.log(username);
 
   const handleBet = async (amount) => {
     try {
       const response = await axios.post("http://localhost:8080/api/players/place", {
-        // username: JSON.stringify(username),
         username: username,
         betAmount: amount,
+        gamename: game,
       });
 
       if (response.data.success) {
         setBalance(response.data.balance);
         setGameResult(response.data.message);
+        setMessage("");
       } else {
+        setGameResult("");
         setMessage(response.data.message);
       }
     } catch (err) {
@@ -48,24 +47,32 @@ const GameContainer = ({ user }) => {
     }
 };
 
+
 return (
-  <div>
-    <div>
-      <img src={require(`../images/games.jpg`)} alt='game' />
-    </div>
-    <div className="balance mt-4">
-        <p><strong>Balance: ${balance}</strong></p>
+  <div
+    style={{
+      height: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <div style={{ textAlign: 'center' }}>
+      <div>
+        <img src={require(`../images/gamecontainer.jpg`)} alt={game} style={{  objectFit: 'cover', borderRadius: '8px' }} />
+      </div>
+      <h1 style={{ color: 'black' }}>{game}</h1>
+      <div>
+        <p style={{ color: 'black' }}>
+          <strong>Balance: ${balance}</strong>
+        </p>
       </div>
 
-      <div className="bet-options mt-4">
-        <p>Place your bet:</p>
-        <div className="bet-buttons">
+      <div>
+        <p style={{ color: 'black' }}><strong>Place your bet:</strong></p>
+        <div>
           {betOptions.map((bet) => (
-            <button
-              key={bet}
-              onClick={() => handleBet(bet)}
-              className="p-2 m-2 bg-blue-500 text-white rounded"
-            >
+            <button key={bet} onClick={() => handleBet(bet)}>
               ${bet}
             </button>
           ))}
@@ -73,18 +80,20 @@ return (
       </div>
 
       {gameResult && (
-        <div className="game-result mt-4">
-          <p>{gameResult}</p>
+        <div>
+          <p style={{ color: 'black' }}><strong>{gameResult}</strong></p>
         </div>
       )}
 
       {message && (
-        <div className="message mt-4 text-red-500">
-          <p>{message}</p>
+        <div>
+          <p style={{ color: 'red' }}><strong>{message}</strong></p>
         </div>
       )}
+       <Link to="/games"><button>Game Library</button></Link>
+    </div>
   </div>
-  )
+);
 };
 
 

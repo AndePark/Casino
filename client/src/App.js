@@ -6,26 +6,21 @@ import LoginPage from './components/LoginPage';
 import GameLibrary from './components/GameLibrary';
 import GameContainer from './components/GameContainer';
 import SignupPage from './components/SignupPage';
-import landingpagebg from './images/landingpagebg.jpg'
+import bg from './images/bg.png'
 
 const App = () => {
-  // const [username, setUsername] = useState(null);
   const [user, setUser] = useState(null);
 
 
 
   return (
     <main style={{
-      backgroundImage: `url(${landingpagebg})`, backgroundSize: 'cover', width: '100vw', height: '100vh'
+      backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center', width: '100vw', height: '100vh'
     }}>
       <Router>
         <Routes>
           <Route path='/' element={<LandingPage user={user} setUser={setUser} />}></Route>
-          {/* {user ? (
-            <Route path="/" element={<LandingPage user={user} setUser={setUser} />}></Route>
-          ) : (
-            <Route path="/login" element={<LoginPage setUser={setUser} />}></Route>
-          )} */}
           <Route path="/login" element={<LoginPage setUser={setUser} />}></Route>
           <Route path="/signup" element={<SignupPage />}></Route>
           <Route path="/games" element={<GameLibrary />}></Route>

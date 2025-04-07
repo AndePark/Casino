@@ -62,14 +62,14 @@ const SignupPage = () => {
     };
   
     return (
-      <div className="p-4 max-w-md mx-auto text-center">
-        <h2 className="text-xl font-bold">Sign Up</h2>
-        <input type="text" placeholder="Username" className="p-2 border rounded w-full mt-2" value={username} onChange={(e) => setUsername(e.target.value)} />
-        <input type="password" placeholder="Password" className="p-2 border rounded w-full mt-2" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input type="password" placeholder='Repeat Password' className='p-2 border rounded w-full mt-2' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
-        <input type="date" className="p-2 border rounded w-full mt-2" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
-        <button className="p-2 bg-green-500 text-white rounded mt-2 w-full" onClick={handleSignup}>Sign Up</button>
-        {error && <p className="text-red-500">{error}</p>}
+      <div>
+        <h2>Sign Up</h2>
+        <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input type="password" placeholder='Repeat Password' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)} />
+        <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
+        <button onClick={handleSignup}>Sign Up</button>
+        {error && <p>{error}</p>}
       </div>
     );
   };
