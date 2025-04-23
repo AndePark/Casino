@@ -1,8 +1,8 @@
-# MiniCasinoApplication
+# CASINO
 
 ## Overview
 
-MiniCasinoApplication is a web-based casino application built with a Spring Boot backend and a React frontend. The app allows users to sign up, log in, place bets on games, deposit funds, and check their balance. It includes static game entries and a sample player pre-configured for testing.
+CASINO is a web-based casino application built with a Spring Boot backend and a React frontend. The app allows users to sign up, log in, place bets on games, deposit funds, and check their balance. It includes static game entries and a sample player pre-configured for testing.
 
 ## Features
 
